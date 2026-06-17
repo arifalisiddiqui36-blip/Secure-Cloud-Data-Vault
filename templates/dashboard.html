@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Security Dashboard - Secure Cloud Data Vault{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4 fade-in" id="dashboard-header">
+    <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="section-heading cyber-font mb-1">
+                <i class="fa-solid fa-gauge-high me-2" style="color: var(--accent-primary);"></i>
+                Security Control Center
+            </h1>
+            <p class="text-muted-custom small mb-0">Active threat monitoring &amp; cryptographic state analytics</p>
+        </div>
+        <span class="status-badge">
+            <span class="pulse-dot"></span>
+            AES-256-GCM Active
+        </span>
+    </div>
+</div>
+
+<!-- Metric Cards -->
+<div class="row g-4 mb-4" id="dashboard-metrics">
+    <div class="col-md-6 col-lg-3 fade-in">
+        <div class="cyber-card metric-card h-100">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <span class="metric-title">Registered Users</span>
+                    <p class="metric-value counter mb-0" id="dash-users-count" data-target="{{ total_users }}">0</p>
+                    <span class="metric-subtitle">Total vault accounts</span>
+                </div>
+                <div class="metric-icon-wrap"><i class="fa-solid fa-users"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 fade-in fade-in-delay-1">
+        <div class="cyber-card metric-card h-100">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <span class="metric-title">Blocked Attacks</span>
+                    <p class="metric-value text-danger counter mb-0" id="dash-attacks-count" data-target="{{ total_attacks }}">0</p>
+                    <span class="metric-subtitle">SQLi interceptions</span>
+                </div>
+                <div class="metric-icon-wrap danger"><i class="fa-solid fa-user-secret"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 fade-in fade-in-delay-2">
+        <div class="cyber-card metric-card h-100">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <span class="metric-title">Active Sessions</span>
+                    <p class="metric-value text-success counter mb-0" id="dash-sessions-count" data-target="{{ active_sessions }}">0</p>
+                    <span class="metric-subtitle">Live authenticated</span>
+                </div>
+                <div class="metric-icon-wrap success"><i class="fa-solid fa-clock"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 fade-in fade-in-delay-3">
+        <div class="cyber-card metric-card h-100">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <span class="metric-title">Encryption Strength</span>
+                    <p class="metric-value text-accent counter mb-0" id="dash-crypto-count" data-target="256">0</p>
+                    <span class="metric-subtitle">AES-GCM bit strength</span>
+                </div>
+                <div class="metric-icon-wrap"><i class="fa-solid fa-key"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4" id="dashboard-charts-logs">
+    <!-- Attack Chart -->
+    <div class="col-lg-5 fade-in">
+        <div class="cyber-card p-4 h-100">
+            <h4 class="card-title cyber-font mb-3">
+                <i class="fa-solid fa-chart-pie me-2" style="color: var(--accent-primary);"></i>
+                Attack Statistics
+            </h4>
+            <div class="chart-container">
+                <canvas id="attackChart"></canvas>
+            </div>
+            <p class="text-muted-custom small text-center mt-3 mb-0">
+                Distribution of blocked threats by signature type.
+            </p>
+        </div>
+    </div>
+
+    <!-- Attack Logs -->
+    <div class="col-lg-7 fade-in fade-in-delay-1" id="attack-logs">
+        <div class="cyber-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h4 class="card-title cyber-font mb-0">
+                    <i class="fa-solid fa-rectangle-list me-2" style="color: var(--accent-primary);"></i>
+                    Attack Logs
+                </h4>
+                <a href="{{ url_for('export_csv') }}" class="btn btn-sm btn-outline-cyber" id="btn-export-csv">
+                    <i class="fa-solid fa-file-csv me-1"></i> Export CSV
+                </a>
+            </div>
+
+            <div class="row g-2 mb-3">
+                <div class="col-md-7">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" class="form-control cyber-input" id="log-search" placeholder="Search by IP or Payload...">
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <select class="form-select cyber-input" id="log-type-filter">
+                        <option value="">All Attack Types</option>
+                        <option value="SQL Comment (--)">SQL Comment (--)</option>
+                        <option value="SQL Single Quote (') delimiter detection">Single Quote (')</option>
+                        <option value="SQL Trivial OR Condition (OR 1=1)">Trivial OR (1=1)</option>
+                        <option value="SQL UNION SELECT Attack">UNION SELECT</option>
+                        <option value="SQL DROP TABLE command">DROP TABLE</option>
+                        <option value="SQL DELETE FROM command">DELETE FROM</option>
+                        <option value="SQL INSERT INTO command">INSERT INTO</option>
+                        <option value="SQL xp_cmdshell command execution attempt">xp_cmdshell</option>
+                        <option value="SQL EXEC command execution attempt">EXEC</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="table terminal-table mb-0" id="attack-logs-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" data-sort="id">ID</th>
+                            <th scope="col" data-sort="type">Type</th>
+                            <th scope="col" data-sort="input">Input Data</th>
+                            <th scope="col" data-sort="ip">IP Address</th>
+                            <th scope="col" data-sort="status">Status</th>
+                            <th scope="col" data-sort="timestamp">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-table-body">
+                        {% for log in recent_logs %}
+                        <tr class="terminal-tr-blocked"
+                            data-id="{{ log.id }}"
+                            data-type="{{ log.attack_type }}"
+                            data-input="{{ log.input_data }}"
+                            data-ip="{{ log.ip_address }}"
+                            data-status="Blocked"
+                            data-timestamp="{{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}">
+                            <td class="fw-bold" style="color: var(--text-primary);">#{{ log.id }}</td>
+                            <td><span class="badge-cyber-danger">{{ log.attack_type }}</span></td>
+                            <td style="color: #FCD34D;" class="text-break">{{ log.input_data }}</td>
+                            <td style="color: var(--accent-secondary);">{{ log.ip_address }}</td>
+                            <td><span class="badge-cyber-danger" style="background: rgba(239,68,68,0.25); color: #FCA5A5;">Blocked</span></td>
+                            <td class="text-muted-custom small">{{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted-custom">No security incident logs.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

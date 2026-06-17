@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Secure Cloud Data Vault{% endblock %}
+
+{% block content %}
+{% if security_alert %}
+    <div class="row justify-content-center my-5 security-block-screen fade-in visible" id="security-block-screen">
+        <div class="col-lg-8 text-center">
+            <div class="cyber-card p-5 border-danger">
+                <div class="mb-4" style="color: var(--danger);">
+                    <i class="fa-solid fa-triangle-exclamation fa-5x animate-pulse"></i>
+                </div>
+                <h1 class="cyber-font mb-3" style="color: var(--danger);">SECURITY INCIDENT TRIGGERED</h1>
+                <h3 class="mb-4">SQL Injection (SQLi) Attempt Intercepted</h3>
+
+                <div class="info-block p-3 mb-4 text-start" style="border-color: rgba(239,68,68,0.5);">
+                    <p class="mono-font mb-1" style="color: var(--danger);"><i class="fa-solid fa-bug"></i> <strong>Threat Type:</strong> SQLi Signature Match</p>
+                    <p class="mono-font text-secondary-custom mb-1"><i class="fa-solid fa-clock"></i> <strong>Timestamp:</strong> {{ datetime_now or '2026-06-17' }}</p>
+                    <p class="mono-font text-secondary-custom mb-0"><i class="fa-solid fa-ban"></i> <strong>Action:</strong> Connection Blocked &amp; IP Logged</p>
+                </div>
+
+                <p class="text-muted-custom mb-4">
+                    The Secure Cloud Data Vault's Layer 1 Input Validation engine detected malicious SQL characters in your submission.
+                    The application database has been isolated and this request was terminated before reaching the SQL interpreter.
+                </p>
+
+                <a href="{{ url_for('home_page') }}" class="btn btn-cyber-danger">
+                    <i class="fa-solid fa-arrow-rotate-left"></i> Return to Safety
+                </a>
+            </div>
+        </div>
+    </div>
+{% else %}
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home-hero-section">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 fade-in">
+                <h1 class="hero-title cyber-font mb-4">
+                    SECURE CLOUD<br>
+                    <span class="accent">DATA VAULT</span>
+                </h1>
+                <p class="hero-subtitle mb-0">
+                    Enterprise-grade cloud security platform providing SQL Injection detection, AES-256 encryption,
+                    capability-based authorization, and advanced threat monitoring.
+                </p>
+                <div class="hero-actions">
+                    {% if session.get('user_id') %}
+                        <a href="{{ url_for('profile_page') }}" class="btn btn-cyber" id="hero-btn-profile">
+                            <i class="fa-solid fa-vault me-2"></i> Enter Vault
+                        </a>
+                        <a href="{{ url_for('dashboard_page') }}" class="btn btn-outline-cyber" id="hero-btn-dash">
+                            <i class="fa-solid fa-chart-line me-2"></i> View Dashboard
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('register_page') }}" class="btn btn-cyber" id="hero-btn-reg">
+                            <i class="fa-solid fa-user-plus me-2"></i> Initialize Account
+                        </a>
+                        <a href="{{ url_for('login_page') }}" class="btn btn-outline-cyber" id="hero-btn-login">
+                            <i class="fa-solid fa-key me-2"></i> Authenticate
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-6 text-center fade-in fade-in-delay-2" id="hero-shield-area">
+                <div class="shield-container" data-parallax="0.03">
+                    <div class="shield-rays"></div>
+                    <div class="shield-glow"></div>
+                    <div class="shield-img">
+                        <svg class="shield-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#A855F7"/>
+                                    <stop offset="50%" style="stop-color:#C084FC"/>
+                                    <stop offset="100%" style="stop-color:#D946EF"/>
+                                </linearGradient>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="3" result="blur"/>
+                                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                </filter>
+                            </defs>
+                            <path d="M100 15 L170 45 L170 100 C170 145 135 175 100 185 C65 175 30 145 30 100 L30 45 Z" fill="url(#shieldGrad)" opacity="0.25" stroke="url(#shieldGrad)" stroke-width="2" filter="url(#glow)"/>
+                            <path d="M100 35 L150 58 L150 100 C150 135 125 158 100 166 C75 158 50 135 50 100 L50 58 Z" fill="url(#shieldGrad)" opacity="0.5" stroke="#C084FC" stroke-width="1.5"/>
+                            <path d="M85 95 L95 108 L118 78" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <span class="status-badge">
+                        <span class="pulse-dot"></span>
+                        System Status: SECURE
+                    </span>
+                </div>
+
+                <div class="status-cards">
+                    <div class="status-mini-card"><i class="fa-solid fa-fire-flame-curved"></i> Firewall Active</div>
+                    <div class="status-mini-card"><i class="fa-solid fa-lock"></i> AES-256-GCM Enabled</div>
+                    <div class="status-mini-card"><i class="fa-solid fa-clock"></i> Session Security Active</div>
+                    <div class="status-mini-card"><i class="fa-solid fa-database"></i> Database Protected</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics -->
+    <section class="mb-5" id="system-stats-bar">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3 fade-in">
+                <div class="cyber-card metric-card h-100">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="metric-title">Registered Users</span>
+                            <p class="metric-value counter" id="stats-users" data-target="{{ user_count }}">0</p>
+                            <span class="metric-subtitle">Shielded vault accounts</span>
+                        </div>
+                        <div class="metric-icon-wrap"><i class="fa-solid fa-users"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in fade-in-delay-1">
+                <div class="cyber-card metric-card h-100">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="metric-title">Blocked Attacks</span>
+                            <p class="metric-value text-danger counter" id="stats-attacks" data-target="{{ attack_count }}">0</p>
+                            <span class="metric-subtitle">SQLi interceptions logged</span>
+                        </div>
+                        <div class="metric-icon-wrap danger"><i class="fa-solid fa-user-secret"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in fade-in-delay-2">
+                <div class="cyber-card metric-card h-100">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="metric-title">Active Sessions</span>
+                            <p class="metric-value text-success counter" id="stats-sessions" data-target="{% if session.get('user_id') %}1{% else %}0{% endif %}">0</p>
+                            <span class="metric-subtitle">Live authenticated sessions</span>
+                        </div>
+                        <div class="metric-icon-wrap success"><i class="fa-solid fa-signal"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 fade-in fade-in-delay-3">
+                <div class="cyber-card metric-card h-100">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="metric-title">Encryption Strength</span>
+                            <p class="metric-value text-accent counter" id="stats-crypto" data-target="256">0</p>
+                            <span class="metric-subtitle">AES-GCM authenticated bits</span>
+                        </div>
+                        <div class="metric-icon-wrap"><i class="fa-solid fa-key"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Double Layer Security -->
+    <section class="mb-5" id="security-layers">
+        <h2 class="section-heading text-center cyber-font fade-in">
+            <i class="fa-solid fa-sitemap me-2" style="color: var(--accent-primary);"></i>
+            DOUBLE LAYER SECURITY
+        </h2>
+
+        <div class="row g-4" id="security-features-grid">
+            <div class="col-lg-6 fade-in">
+                <div class="cyber-card layer-card h-100">
+                    <div class="layer-icon"><i class="fa-solid fa-filter"></i></div>
+                    <h3 class="card-title cyber-font mb-2">Layer 1: Input Validation</h3>
+                    <p class="text-secondary-custom mb-0">
+                        The first gatekeeper intercepts all incoming requests, scans fields against SQL Injection signatures,
+                        sanitizes inputs, and verifies password complexity before any backend processing.
+                    </p>
+                    <ul class="layer-feature-list">
+                        <li><i class="fa-solid fa-shield-halved"></i> SQL Injection Detection</li>
+                        <li><i class="fa-solid fa-code"></i> Input Sanitization</li>
+                        <li><i class="fa-solid fa-envelope"></i> Email Validation</li>
+                        <li><i class="fa-solid fa-fingerprint"></i> Password Verification</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-6 fade-in fade-in-delay-1">
+                <div class="cyber-card layer-card h-100">
+                    <div class="layer-icon"><i class="fa-solid fa-key"></i></div>
+                    <h3 class="card-title cyber-font mb-2">Layer 2: Data Protection</h3>
+                    <p class="text-secondary-custom mb-0">
+                        Sensitive parameters are handled cryptographically. User data is encrypted with AES-256-GCM,
+                        sessions are capped at 15 minutes, and capability-based access control governs all admin actions.
+                    </p>
+                    <ul class="layer-feature-list">
+                        <li><i class="fa-solid fa-lock"></i> AES-256-GCM Encryption</li>
+                        <li><i class="fa-solid fa-clock"></i> Session Security</li>
+                        <li><i class="fa-solid fa-user-lock"></i> RBAC Authorization</li>
+                        <li><i class="fa-solid fa-tags"></i> Capability Codes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Info Cards -->
+    <section class="mb-5">
+        <div class="row g-4">
+            <div class="col-lg-6 fade-in">
+                <div class="cyber-card layer-card h-100">
+                    <div class="layer-icon" style="color: var(--warning);"><i class="fa-solid fa-microchip"></i></div>
+                    <h3 class="card-title cyber-font mb-2">SQLi Sandbox Demonstration</h3>
+                    <p class="text-secondary-custom mb-0">
+                        Test the protection mechanism by typing SQL commands into forms. Try inputs containing
+                        comment delimiters (<code class="text-accent" style="color: var(--accent-secondary);">--</code>)
+                        or structural bypasses (<code class="text-accent" style="color: var(--accent-secondary);">' OR 1=1 --</code>).
+                        The security engine will immediately intercept and log the threat.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-6 fade-in fade-in-delay-1">
+                <div class="cyber-card layer-card h-100">
+                    <div class="layer-icon" style="color: var(--success);"><i class="fa-solid fa-tags"></i></div>
+                    <h3 class="card-title cyber-font mb-2">Capability Codes (RBAC)</h3>
+                    <p class="text-secondary-custom mb-0">
+                        Administrative endpoints require verified authorization tags:
+                        <code style="color: var(--accent-secondary);">VIEW_USERS</code>,
+                        <code style="color: var(--accent-secondary);">VIEW_LOGS</code>,
+                        <code style="color: var(--accent-secondary);">DELETE_RECORDS</code>, and
+                        <code style="color: var(--accent-secondary);">ADMIN_ACCESS</code>.
+                        Standard users are restricted; admin accounts access the full dashboard.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endif %}
+{% endblock %}

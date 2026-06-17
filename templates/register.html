@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Secure Cloud Data Vault{% endblock %}
+
+{% block content %}
+<div class="auth-split" id="register-container">
+    <div class="auth-visual fade-in">
+        <div class="auth-visual-content">
+            <div class="shield-container" style="width: 200px; height: 200px; margin-bottom: 2rem;">
+                <div class="shield-rays"></div>
+                <div class="shield-glow"></div>
+                <div class="shield-img">
+                    <i class="fa-solid fa-user-shield" style="font-size: 5rem; color: var(--accent-secondary); text-shadow: var(--glow-purple);"></i>
+                </div>
+            </div>
+            <h2 class="cyber-font mb-3">Initialize Your Vault</h2>
+            <p class="text-secondary-custom">
+                Create a double-layer protected account with live password validation, AES-256 encryption, and enterprise-grade security.
+            </p>
+            <div class="security-badges justify-content-center">
+                <span class="security-badge"><i class="fa-solid fa-bug-slash"></i> SQLi Protected</span>
+                <span class="security-badge"><i class="fa-solid fa-lock"></i> AES-256-GCM</span>
+                <span class="security-badge"><i class="fa-solid fa-fingerprint"></i> Live Validation</span>
+                <span class="security-badge"><i class="fa-solid fa-shield-halved"></i> RBAC Ready</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-form-side fade-in fade-in-delay-1">
+        <div class="cyber-card auth-card" style="max-width: 500px;">
+            <div class="text-center mb-4">
+                <i class="fa-solid fa-user-plus fa-2x mb-3" style="color: var(--accent-primary);"></i>
+                <h2 class="cyber-font mb-1">Create Vault</h2>
+                <p class="text-muted-custom small">Register a new double-layer protected vault account</p>
+            </div>
+
+            <div id="register-alert" class="d-none" role="alert"></div>
+
+            <form id="register-form" novalidate>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="float-group">
+                    <input type="text" class="form-control cyber-input" id="username" name="username" placeholder=" " required autocomplete="username">
+                    <label for="username" class="float-label"><i class="fa-solid fa-user me-1"></i> Username</label>
+                </div>
+
+                <div class="float-group">
+                    <input type="email" class="form-control cyber-input" id="email" name="email" placeholder=" " required autocomplete="email">
+                    <label for="email" class="float-label"><i class="fa-solid fa-envelope me-1"></i> Email Address</label>
+                </div>
+
+                <div class="float-group">
+                    <input type="password" class="form-control cyber-input" id="reg-password" name="password" placeholder=" " required autocomplete="new-password" style="padding-right: 3rem !important;">
+                    <label for="reg-password" class="float-label"><i class="fa-solid fa-lock me-1"></i> Master Password</label>
+                    <button type="button" class="password-toggle-btn" data-target="reg-password" aria-label="Toggle password visibility">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                    <div class="password-meter">
+                        <div id="password-strength-bar" class="password-meter-bar"></div>
+                    </div>
+                    <div id="password-strength-text" class="text-muted-custom small mt-2">
+                        Complexity required: 8+ chars, uppercase, lowercase, number, symbol.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="sensitive_info" class="metric-title d-block mb-2"><i class="fa-solid fa-box-archive me-1"></i> Sensitive Information</label>
+                    <textarea class="form-control cyber-input" id="sensitive_info" name="sensitive_info" rows="3" placeholder="Enter sensitive keys, configurations, secrets or private notes..." required></textarea>
+                    <div class="text-muted-custom small mt-1">
+                        <i class="fa-solid fa-lock" style="color: var(--accent-primary);"></i>
+                        Encrypted with AES-256-GCM before writing to the database.
+                    </div>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-cyber" id="btn-submit-register">
+                        <i class="fa-solid fa-shield-halved me-2"></i> Register Secured Account
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="text-muted-custom small mb-0">
+                    Already registered?
+                    <a href="{{ url_for('login_page') }}" style="color: var(--accent-secondary); text-decoration: none;">
+                        Login Securely <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

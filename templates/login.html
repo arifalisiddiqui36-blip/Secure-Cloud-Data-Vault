@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Secure Cloud Data Vault{% endblock %}
+
+{% block content %}
+<div class="auth-split" id="login-container">
+    <div class="auth-visual fade-in">
+        <div class="auth-visual-content">
+            <div class="shield-container" style="width: 200px; height: 200px; margin-bottom: 2rem;">
+                <div class="shield-glow"></div>
+                <div class="shield-img">
+                    <svg class="shield-svg" style="width: 140px; height: 140px;" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="loginShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#A855F7"/>
+                                <stop offset="100%" style="stop-color:#D946EF"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M100 15 L170 45 L170 100 C170 145 135 175 100 185 C65 175 30 145 30 100 L30 45 Z" fill="url(#loginShieldGrad)" opacity="0.3" stroke="url(#loginShieldGrad)" stroke-width="2"/>
+                        <path d="M100 35 L150 58 L150 100 C150 135 125 158 100 166 C75 158 50 135 50 100 L50 58 Z" fill="url(#loginShieldGrad)" opacity="0.6"/>
+                        <path d="M85 95 L95 108 L118 78" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+            <h2 class="cyber-font mb-3">Secure Authentication</h2>
+            <p class="text-secondary-custom">
+                Multi-layer identity verification with session encryption, CSRF protection, and automatic timeout policies.
+            </p>
+            <div class="security-badges justify-content-center">
+                <span class="security-badge"><i class="fa-solid fa-lock"></i> AES-256</span>
+                <span class="security-badge"><i class="fa-solid fa-shield-halved"></i> CSRF Protected</span>
+                <span class="security-badge"><i class="fa-solid fa-clock"></i> 15min Session</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-form-side fade-in fade-in-delay-1">
+        <div class="cyber-card auth-card">
+            <div class="text-center mb-4">
+                <i class="fa-solid fa-key fa-2x mb-3" style="color: var(--accent-primary);"></i>
+                <h2 class="cyber-font mb-1">Authenticate</h2>
+                <p class="text-muted-custom small">Verify identity to unlock session key</p>
+            </div>
+
+            <div id="login-alert" class="d-none" role="alert"></div>
+
+            <form id="login-form" novalidate>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="float-group">
+                    <input type="email" class="form-control cyber-input" id="email" name="email" placeholder=" " required autocomplete="email">
+                    <label for="email" class="float-label"><i class="fa-solid fa-envelope me-1"></i> Email Address</label>
+                </div>
+
+                <div class="float-group">
+                    <input type="password" class="form-control cyber-input" id="password" name="password" placeholder=" " required autocomplete="current-password" style="padding-right: 3rem !important;">
+                    <label for="password" class="float-label"><i class="fa-solid fa-lock me-1"></i> Master Password</label>
+                    <button type="button" class="password-toggle-btn" data-target="password" aria-label="Toggle password visibility">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember-me" name="remember">
+                        <label class="form-check-label" for="remember-me">Remember me</label>
+                    </div>
+                    <a href="#" class="text-decoration-none small" style="color: var(--accent-secondary);" id="forgot-password">Forgot password?</a>
+                </div>
+
+                <div class="policy-notice mb-4">
+                    <i class="fa-solid fa-circle-info me-1" style="color: var(--accent-primary);"></i>
+                    <strong>Session Policy:</strong> Your login session will automatically timeout after 15 minutes of inactivity.
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-cyber" id="btn-submit-login">
+                        <i class="fa-solid fa-shield-halved me-2"></i> Login Securely
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="text-muted-custom small mb-0">
+                    New here?
+                    <a href="{{ url_for('register_page') }}" style="color: var(--accent-secondary); text-decoration: none;">
+                        Create a Vault <i class="fa-solid fa-user-plus"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
